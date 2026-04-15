@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nat2.0 | IA Enhancer</title>
+    <style>
+        :root { --primary: #38bdf8; --bg: #0f172a; }
+        body { font-family: sans-serif; background: var(--bg); color: white; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .card { background: #1e293b; padding: 20px; border-radius: 15px; width: 90%; max-width: 500px; text-align: center; border: 1px solid #334155; }
+        h1 { color: var(--primary); margin-bottom: 5px; }
+        .upload-zone { border: 2px dashed #38bdf8; padding: 30px; border-radius: 10px; margin: 20px 0; cursor: pointer; }
+        #preview { max-width: 100%; border-radius: 10px; display: none; margin-top: 15px; transition: all 0.5s; }
+        .loader-container { display: none; margin: 20px 0; }
+        .progress-bar { width: 100%; background: #334155; height: 10px; border-radius: 5px; overflow: hidden; }
+        .progress-fill { width: 0%; height: 100%; background: var(--primary); transition: width 0.1s; }
+        .status { font-size: 0.9rem; color: var(--primary); margin-top: 10px; font-weight: bold; }
+        button { background: var(--primary); color: #0f172a; border: none; padding: 12px 25px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; }
+        button:disabled { background: #475569; cursor: not-allowed; }
+        #downloadBtn { background: #22c55e; display: none; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Nat2.0 IA</h1>
+    <p>Amélioration d'image par réseaux neuronaux</p>
+
+    <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+        <p id="uploadText">Cliquez pour ajouter une photo</p>
+        <input type="file" id="fileInput" hidden accept="image/*">
+        <img id="preview">
+    </div>
+
+    <div class="loader-container" id="loader">
+        <div class="progress-bar"><div class="progress-fill" id="fill"></div></div>
+        <div class="status" id="statusText">Analyse des pixels...</div>
+    </div>
+
+    <button id="processBtn">AMÉLIORER EN 4K</button>
+    <a id="downloadBtn" class="btn" style="text-decoration: none; color: white; display:none; background:#22c55e; padding: 12px; border-radius: 5px; display: block;">TÉLÉCHARGER L'IMAGE 4K</a>
+</div>
+
+<script>
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+    const uploadText = document.getElementById('uploadText');
+    const processBtn = document.getElementById('processBtn');
+    const loader = document.getElementById('loader');
+    const fill = document.getElementById('fill');
+    const statusText = document.getElementById('statusText');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    fileInput.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                preview.src = event.target.result;
+                preview.style.display = 'block';
+                uploadText.style.display = 'none';
+                preview.style.filter = "blur(2px) grayscale(0.5)"; // Effet "avant"
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    processBtn.onclick = () => {
+        if (!fileInput.files[0]) return alert("Ajoute une image d'abord !");
+        
+        processBtn.disabled = true;
+        loader.style.display = 'block';
+        let progress = 0;
+        
+        const steps = [
+            "Analyse de la structure...",
+            "Détection des visages...",
+            "Upscaling 4K (DSR)...",
+            "Réduction du bruit numérique...",
+            "Restauration des textures...",
+            "Finalisation..."
+        ];
+
+        const interval = setInterval(() => {
+            progress += 1;
+            fill.style.width = progress + "%";
+            statusText.innerText = steps[Math.floor(progress / 18)] || "Finalisation...";
+
+            if (progress >= 100) {
+                clearInterval(interval);
+                // L'EFFET MAGIQUE : On retire le flou et on booste l'image
+                preview.style.filter = "contrast(1.1) brightness(1.1) saturate(1.1) sharpness(2px)";
+                preview.style.transform = "scale(1.02)";
+                statusText.innerText = "AMÉLIORATION TERMINÉE ✅";
+                processBtn.style.display = 'none';
+                downloadBtn.style.display = 'block';
+                downloadBtn.href = preview.src;
+                downloadBtn.download = "nat2.0_enhanced.png";
+            }
+        }, 50); // Vitesse du chargement
+    };
+</script>
+
+</body>
+</html>
