@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nat2.0 - AI Image Studio</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle at top, #1a001f, #000);
+    color: white;
+    overflow-x: hidden;
+}
+
+/* HEADER */
+header {
+    text-align: center;
+    padding: 30px;
+    font-size: 40px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: #ff00ff;
+    text-shadow: 0 0 10px #ff00ff, 0 0 30px #00ffff;
+}
+
+/* CONTAINER */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* UPLOAD BOX */
+.upload-box {
+    border: 2px dashed #ff00ff;
+    padding: 20px;
+    width: 320px;
+    text-align: center;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+}
+
+/* IMAGE PREVIEW */
+img {
+    max-width: 320px;
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: 0 0 20px #00ffff;
+}
+
+/* INPUT */
+textarea {
+    width: 320px;
+    height: 80px;
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+    outline: none;
+}
+
+/* BUTTONS */
+button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 5px;
+    transition: 0.2s;
+}
+
+.btn {
+    background: #ff00ff;
+    color: white;
+    box-shadow: 0 0 10px #ff00ff;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    background: #00ffff;
+    box-shadow: 0 0 15px #00ffff;
+    color: black;
+}
+
+/* RESULT */
+.result {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #00ffff;
+    border-radius: 10px;
+}
+
+small {
+    opacity: 0.7;
+}
+</style>
+</head>
+
+<body>
+
+<header>⚡ NAT 2.0 AI IMAGE STUDIO ⚡</header>
+
+<div class="container">
+
+    <div class="upload-box">
+        <p>📤 Import ton image</p>
+        <input type="file" id="fileInput" accept="image/*">
+    </div>
+
+    <textarea id="prompt" placeholder="Ex: ajouter une voiture GTA, enlever un objet, améliorer en 4K..."></textarea>
+
+    <div>
+        <button class="btn" onclick="enhanceImage('4K')">✨ Améliorer en 4K</button>
+        <button class="btn" onclick="enhanceImage('8K')">🚀 Améliorer en 8K</button>
+        <button class="btn" onclick="enhanceImage('edit')">🛠 Modifier (IA)</button>
+    </div>
+
+    <div id="preview"></div>
+
+    <div class="result" id="result">
+        <small>Résultat IA apparaîtra ici...</small>
+    </div>
+
+</div>
+
+<script>
+let uploadedImage = null;
+
+// LOAD IMAGE
+document.getElementById("fileInput").addEventListener("change", function(e){
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function(event){
+        uploadedImage = event.target.result;
+        document.getElementById("preview").innerHTML =
+            `<img src="${uploadedImage}" />`;
+    }
+
+    reader.readAsDataURL(file);
+});
+
+// FAKE AI FUNCTION (PLACEHOLDER)
+function enhanceImage(mode){
+    const prompt = document.getElementById("prompt").value;
+
+    if(!uploadedImage){
+        alert("Ajoute une image d'abord !");
+        return;
+    }
+
+    document.getElementById("result").innerHTML = `
+        <p>⚙ Traitement IA en cours...</p>
+        <small>Mode: ${mode}</small><br/>
+        <small>Prompt: ${prompt || "aucun"}</small>
+    `;
+
+    // simulation effet IA
+    setTimeout(() => {
+        document.getElementById("result").innerHTML = `
+            <h3>✅ Image améliorée (${mode})</h3>
+            <p>Prompt appliqué : ${prompt || "aucun"}</p>
+            <p>🎮 Style GTA néon appliqué (simulation)</p>
+        `;
+    }, 2000);
+}
+</script>
+
+</body>
+</html>
